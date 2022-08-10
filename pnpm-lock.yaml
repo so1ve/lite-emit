@@ -6,7 +6,7 @@ importers:
     specifiers:
       '@antfu/ni': ^0.17.2
       '@babel/types': ^7.18.10
-      '@so1ve/eslint-config': ^0.28.0
+      '@so1ve/eslint-config': ^0.28.1
       '@types/node': ^18.6.5
       bumpp: ^8.2.1
       eslint: ^8.21.0
@@ -21,7 +21,7 @@ importers:
     devDependencies:
       '@antfu/ni': 0.17.2
       '@babel/types': 7.18.10
-      '@so1ve/eslint-config': 0.28.0_qugx7qdu5zevzvxaiqyxfiwquq
+      '@so1ve/eslint-config': 0.28.1_qugx7qdu5zevzvxaiqyxfiwquq
       '@types/node': 18.6.5
       bumpp: 8.2.1
       eslint: 8.21.0
@@ -453,8 +453,8 @@ packages:
       picomatch: 2.3.0
     dev: true
 
-  /@so1ve/eslint-config-basic/0.28.0_2ljhqtgazucmv5oqalqzfl5e3u:
-    resolution: {integrity: sha512-oZd07tYk+/1IkPFhZQkUsl4RbHqTnemn7T3EAEyMMPvX6V+ZPrS1SExdHK7mbwv8nIFFUQ4PsXPgIQ6QRfIbRA==}
+  /@so1ve/eslint-config-basic/0.28.1_2ljhqtgazucmv5oqalqzfl5e3u:
+    resolution: {integrity: sha512-xfvBkvtskXSmW/RWgQs+QsT9yklXB9w0u9TCLiw0drVOxa1GdHlzmeQK/7y6f3Ozx6NA/NEWC/8jEU+3jsGaUg==}
     peerDependencies:
       eslint: '>=7.4.0'
     dependencies:
@@ -478,12 +478,12 @@ packages:
       - supports-color
     dev: true
 
-  /@so1ve/eslint-config-react/0.28.0_qugx7qdu5zevzvxaiqyxfiwquq:
-    resolution: {integrity: sha512-ECGzN1CNOU5WHRAORt7ByhLB4a92wdQRi5mwYcqxw07SIcsWKlb9amSxEzZA40FCePEc6DrJcCZKoGH+zU8w7Q==}
+  /@so1ve/eslint-config-react/0.28.1_qugx7qdu5zevzvxaiqyxfiwquq:
+    resolution: {integrity: sha512-oUVSC1YpSaNKcoDLRSoQLYA4hDvY5+2DYmv2U+RLfezpxTdtQD2o3gym1onj4y5Cs1SUPvHemsSCK+i70EKUwQ==}
     peerDependencies:
       eslint: '>=7.4.0'
     dependencies:
-      '@so1ve/eslint-config-ts': 0.28.0_qugx7qdu5zevzvxaiqyxfiwquq
+      '@so1ve/eslint-config-ts': 0.28.1_qugx7qdu5zevzvxaiqyxfiwquq
       eslint: 8.21.0
       eslint-plugin-react: 7.30.1_eslint@8.21.0
     transitivePeerDependencies:
@@ -493,13 +493,13 @@ packages:
       - typescript
     dev: true
 
-  /@so1ve/eslint-config-ts/0.28.0_qugx7qdu5zevzvxaiqyxfiwquq:
-    resolution: {integrity: sha512-RYjG4rDOt0NjROVdRER+rJaNc47ZIeh16IiYExU5+D/8tE7IQ+qqhSWm9vgB9EdYwSgL1tcAaxUmu5YAnCSxNA==}
+  /@so1ve/eslint-config-ts/0.28.1_qugx7qdu5zevzvxaiqyxfiwquq:
+    resolution: {integrity: sha512-/2yCavkzjoMfZzTb1sm4k0B1oR8wjZ+KRZubFxo6PeLqShrJLM4EKkzl3/goO1DgpPf+HFGjt7yPfllk3QgSNA==}
     peerDependencies:
       eslint: '>=7.4.0'
       typescript: '>=3.9'
     dependencies:
-      '@so1ve/eslint-config-basic': 0.28.0_2ljhqtgazucmv5oqalqzfl5e3u
+      '@so1ve/eslint-config-basic': 0.28.1_2ljhqtgazucmv5oqalqzfl5e3u
       '@typescript-eslint/eslint-plugin': 5.30.6_hm47hl5ct6rjrk7lg4ego5ti4a
       '@typescript-eslint/parser': 5.30.6_qugx7qdu5zevzvxaiqyxfiwquq
       eslint: 8.21.0
@@ -510,12 +510,12 @@ packages:
       - supports-color
     dev: true
 
-  /@so1ve/eslint-config-vue/0.28.0_qugx7qdu5zevzvxaiqyxfiwquq:
-    resolution: {integrity: sha512-uCeTddkBR7RrSx5AdZboniFMc6L+pN466EWYaVxRaWfOpfo1mxgcBc3l2kPaiTu+BbDOhJDoaaL2BOkEpyHifw==}
+  /@so1ve/eslint-config-vue/0.28.1_qugx7qdu5zevzvxaiqyxfiwquq:
+    resolution: {integrity: sha512-jF0ckbnQnHtfx1qJ0+AGKBVLJnJ7BksdSKsUPiDVO1g/b4MEkn/w5wZ97q2TKkA7haCkRrZI1lmdmD/4GgMjYQ==}
     peerDependencies:
       eslint: '>=7.4.0'
     dependencies:
-      '@so1ve/eslint-config-ts': 0.28.0_qugx7qdu5zevzvxaiqyxfiwquq
+      '@so1ve/eslint-config-ts': 0.28.1_qugx7qdu5zevzvxaiqyxfiwquq
       eslint: 8.21.0
       eslint-plugin-vue: 9.2.0_eslint@8.21.0
     transitivePeerDependencies:
@@ -525,13 +525,13 @@ packages:
       - typescript
     dev: true
 
-  /@so1ve/eslint-config/0.28.0_qugx7qdu5zevzvxaiqyxfiwquq:
-    resolution: {integrity: sha512-La6S6T8lFHNDJyz+JLJ1UEH2hNboT8IhbFzJU9Zc/cHuBUbRxjePB7+IVc/ogtW2gpg81/bCAd3fnvSejyvIlw==}
+  /@so1ve/eslint-config/0.28.1_qugx7qdu5zevzvxaiqyxfiwquq:
+    resolution: {integrity: sha512-3bG1pz4pjQkXV3J0KIn9IXYFmlt+1d34XBRlhyT5f+LGVnByiSshK3m2ykyce0c8VfNXGJVqCwLaN2MlXxLh4Q==}
     peerDependencies:
       eslint: '>=7.4.0'
     dependencies:
-      '@so1ve/eslint-config-react': 0.28.0_qugx7qdu5zevzvxaiqyxfiwquq
-      '@so1ve/eslint-config-vue': 0.28.0_qugx7qdu5zevzvxaiqyxfiwquq
+      '@so1ve/eslint-config-react': 0.28.1_qugx7qdu5zevzvxaiqyxfiwquq
+      '@so1ve/eslint-config-vue': 0.28.1_qugx7qdu5zevzvxaiqyxfiwquq
       '@typescript-eslint/eslint-plugin': 5.30.6_hm47hl5ct6rjrk7lg4ego5ti4a
       '@typescript-eslint/parser': 5.30.6_qugx7qdu5zevzvxaiqyxfiwquq
       eslint: 8.21.0
