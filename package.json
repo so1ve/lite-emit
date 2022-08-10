@@ -1,0 +1,66 @@
+{
+  "name": "lite-emit",
+  "version": "0.0.0",
+  "packageManager": "pnpm@7.9.0",
+  "author": "Ray <nn_201312@163.com> (@so1ve)",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/so1ve/lite-emit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/so1ve/lite-emit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/so1ve/lite-emit/issues"
+  },
+  "license": "MIT",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && unbuild",
+    "stub": "unbuild --stub",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepublishOnly": "nr build",
+    "release": "bumpp --commit --push --tag && pnpm publish",
+    "start": "tsx src/index.ts",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@antfu/ni": "^0.17.2",
+    "@babel/types": "^7.18.10",
+    "@so1ve/eslint-config": "^0.28.0",
+    "@types/node": "^18.6.5",
+    "bumpp": "^8.2.1",
+    "eslint": "^8.21.0",
+    "jiti": "^1.14.0",
+    "pnpm": "^7.9.0",
+    "rimraf": "^3.0.2",
+    "tsx": "^3.8.1",
+    "typescript": "^4.7.4",
+    "unbuild": "^0.7.6",
+    "vite": "^3.0.5",
+    "vitest": "^0.21.1"
+  }
+}
