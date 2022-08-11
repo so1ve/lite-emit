@@ -1,4 +1,4 @@
-export interface EventMap { [key: string | symbol]: unknown[] }
+export interface EventMap { [key: string | symbol]: any[] }
 
 export type Listener<A extends any[]> = (...args: A) => void;
 
