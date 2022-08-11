@@ -15,9 +15,19 @@ const Sym = Symbol("d");
 
 let countFoo = 0;
 let countBar = 0;
-let countBaz = 0;
+let countBaz1 = 0;
+let countBaz2 = 0;
 
 describe("should", () => {
+  const wildcardEvents: any[] = [];
+  const bazListener1 = (num: number) => {
+    countBaz1++;
+    expect(num).toBe(42);
+  };
+  const bazListener2 = (num: number) => {
+    countBaz2++;
+    expect(num).toBe(42);
+  };
   it("on", () => {
     emitter.on("foo", (str) => {
       countFoo++;
@@ -29,28 +39,42 @@ describe("should", () => {
       expect(num).toBe(42);
       expect(symbol).toBe(Sym);
     });
-    emitter.on("baz", (num) => {
-      countBaz++;
-      expect(num).toBe(42);
+    // Chainable
+    emitter.on("baz", bazListener1)
+      .on("baz", bazListener2);
+  });
+
+  it("on wildcard", () => {
+    emitter.on("*", (...args) => {
+      wildcardEvents.push(args);
     });
   });
 
   it("emit", () => {
-    emitter.emit("foo", "foo");
-    emitter.emit("bar", "bar", 42, Sym);
-    emitter.emit("baz", 42);
+    emitter.emit("foo", "foo")
+      .emit("bar", "bar", 42, Sym)
+      .emit("baz", 42);
   });
 
   it("off", () => {
     emitter.off("foo");
     emitter.emit("foo", "foo");
     expect(countFoo).toBe(1);
+    emitter.off("baz", bazListener1);
+    emitter.emit("baz", 42);
+    expect(countBaz1).toBe(1);
+    expect(countBaz2).toBe(2);
   });
 
-  it("clear", () => {
-    emitter.clear("bar");
+  it("off wildcard", () => {
+    emitter.off("*");
     emitter.emit("bar", "bar", 42, Sym);
     expect(countBar).toBe(1);
-    expect(countBaz).toBe(1);
+    expect(countBaz1).toBe(1);
+    expect(countBaz2).toBe(2);
+  });
+
+  it("on wildcard listens all events", () => {
+    expect(wildcardEvents).toHaveLength(6);
   });
 });
