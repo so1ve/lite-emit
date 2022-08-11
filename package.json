@@ -52,6 +52,7 @@
     "@babel/types": "^7.18.10",
     "@so1ve/eslint-config": "^0.28.1",
     "@types/node": "^18.6.5",
+    "@vitest/ui": "^0.21.1",
     "bumpp": "^8.2.1",
     "eslint": "^8.21.0",
     "jiti": "^1.14.0",
