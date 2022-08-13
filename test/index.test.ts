@@ -28,6 +28,12 @@ describe("should", () => {
     countBaz2++;
     expect(num).toBe(42);
   };
+  const wildcardListener1 = (...args: any[]) => {
+    wildcardEvents.push(args);
+  };
+  const wildcardListener2 = (...args: any[]) => {
+    wildcardEvents.push(args);
+  };
   it("on", () => {
     emitter.on("foo", (str) => {
       countFoo++;
@@ -45,9 +51,8 @@ describe("should", () => {
   });
 
   it("on wildcard", () => {
-    emitter.on("*", (...args) => {
-      wildcardEvents.push(args);
-    });
+    emitter.on("*", wildcardListener1);
+    emitter.on("*", wildcardListener2);
   });
 
   it("emit", () => {
@@ -57,6 +62,7 @@ describe("should", () => {
   });
 
   it("off", () => {
+    expect(countFoo).toBe(1);
     emitter.off("foo");
     emitter.emit("foo", "foo");
     expect(countFoo).toBe(1);
@@ -67,14 +73,21 @@ describe("should", () => {
   });
 
   it("off wildcard", () => {
-    emitter.off("*");
-    emitter.emit("bar", "bar", 42, Sym);
     expect(countBar).toBe(1);
+    expect(countBaz1).toBe(1);
+    expect(countBaz2).toBe(2);
+    emitter.off("*", wildcardListener1);
+    emitter.emit("bar", "bar", 42, Sym);
+    expect(countBar).toBe(2);
+    expect(countBaz1).toBe(1);
+    expect(countBaz2).toBe(2);
+    emitter.off("*");
+    expect(countBar).toBe(2);
     expect(countBaz1).toBe(1);
     expect(countBaz2).toBe(2);
   });
 
   it("on wildcard listens all events", () => {
-    expect(wildcardEvents).toHaveLength(6);
+    expect(wildcardEvents).toHaveLength(11);
   });
 });
