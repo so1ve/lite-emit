@@ -52,10 +52,11 @@ emitter.emit("baz", 42);
 // Output:
 // 42
 
-// Remove all listeners for all events
+// Remove all wildcard listeners
 emitter.off("*");
-// Output:
-// <NONE>
+
+// Remove all listeners for all events
+emitter.clear();
 ```
 
 ## License

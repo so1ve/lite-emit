@@ -9,7 +9,7 @@ export type ListenerMap<EM extends EventMap> = {
 };
 
 export class LiteEmit<EM extends EventMap = EventMap> {
-  private listenerMap: ListenerMap<EM> = {} as any;
+  private listenerMap = {} as ListenerMap<EM>;
   private wildcardListeners = new Set<WildcardListener<EM>>();
 
   on (event: "*", listener: WildcardListener<EM>): this;
@@ -39,7 +39,6 @@ export class LiteEmit<EM extends EventMap = EventMap> {
       if (listener) {
         this.wildcardListeners.delete(listener as WildcardListener<EM>);
       } else {
-        this.listenerMap = {} as any;
         this.wildcardListeners.clear();
       }
       return this;
@@ -50,5 +49,10 @@ export class LiteEmit<EM extends EventMap = EventMap> {
       this.listenerMap[event]?.clear();
     }
     return this;
+  }
+
+  clear () {
+    this.listenerMap = {} as any;
+    this.wildcardListeners.clear();
   }
 }

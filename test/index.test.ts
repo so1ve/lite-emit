@@ -82,12 +82,19 @@ describe("should", () => {
     expect(countBaz1).toBe(1);
     expect(countBaz2).toBe(2);
     emitter.off("*");
-    expect(countBar).toBe(2);
+    emitter.emit("bar", "bar", 42, Sym);
+    expect(countBar).toBe(3);
     expect(countBaz1).toBe(1);
     expect(countBaz2).toBe(2);
   });
 
   it("on wildcard listens all events", () => {
     expect(wildcardEvents).toHaveLength(11);
+  });
+
+  it("clear", () => {
+    emitter.clear();
+    emitter.emit("bar", "bar", 42, Sym);
+    expect(countBar).toBe(3);
   });
 });
