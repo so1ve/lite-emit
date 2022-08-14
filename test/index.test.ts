@@ -93,7 +93,7 @@ describe("should", () => {
   });
 
   it("clear", () => {
-    emitter.clear();
+    emitter.off("**");
     emitter.emit("bar", "bar", 42, Sym);
     expect(countBar).toBe(3);
   });
