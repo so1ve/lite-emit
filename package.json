@@ -1,6 +1,6 @@
 {
   "name": "lite-emit",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "packageManager": "pnpm@7.9.0",
   "author": "Ray <nn_201312@163.com> (@so1ve)",
   "description": "A simple, lightweight, and fast event emitter.",
