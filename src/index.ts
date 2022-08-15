@@ -2,11 +2,11 @@ export interface EventMap { [key: string | symbol]: any[] }
 
 export type Listener<A extends any[]> = (...args: A) => void;
 
-type _WildcardListener<EM extends EventMap, K extends keyof EM = keyof EM> = Listener<K extends unknown ? [...EM[K], K] : [...EM[K], K]>;
+type _WildcardListener<EM extends EventMap, K extends keyof EM = keyof EM> = Listener<K extends unknown ? [K, ...EM[K]] : [K, ...EM[K]]>;
 export type WildcardListener<EM extends EventMap> = _WildcardListener<EM>;
 
 export type ListenerMap<EM extends EventMap> = {
-  [K in keyof EM]: Set<Listener<EM[K]>>
+  [K in keyof EM]?: Set<Listener<EM[K]>>
 };
 
 export class LiteEmit<EM extends EventMap = EventMap> {
@@ -23,14 +23,14 @@ export class LiteEmit<EM extends EventMap = EventMap> {
     if (!this.listenerMap[event]) {
       this.listenerMap[event] = new Set();
     }
-    this.listenerMap[event].add(listener as Listener<EM[K]>);
+    this.listenerMap[event]!.add(listener as Listener<EM[K]>);
     return this;
   }
 
   emit<K extends keyof EM>(event: K, ...args: EM[K]): this {
     if (this.listenerMap[event]) {
-      this.wildcardListeners.forEach(listener => listener(...[...args, event] as any));
-      this.listenerMap[event].forEach(listener => listener(...args));
+      this.wildcardListeners.forEach(listener => listener(...[event, ...args] as any));
+      this.listenerMap[event]!.forEach(listener => listener(...args));
     }
     return this;
   }
