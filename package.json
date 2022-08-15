@@ -53,8 +53,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && unbuild",
-    "stub": "unbuild --stub",
+    "build": "rimraf dist && puild",
+    "watch": "puild --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "nr build",
@@ -73,10 +73,10 @@
     "eslint": "^8.21.0",
     "jiti": "^1.14.0",
     "pnpm": "^7.9.0",
+    "puild": "^1.2.3",
     "rimraf": "^3.0.2",
     "tsx": "^3.8.1",
     "typescript": "^4.7.4",
-    "unbuild": "^0.7.6",
     "vite": "^3.0.5",
     "vitest": "^0.21.1"
   }
