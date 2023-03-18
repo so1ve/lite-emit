@@ -1,4 +1,4 @@
-export type EventMap = Record<string | symbol, any[]>;
+export interface EventMap { [key: string | symbol]: any[] }
 
 export type Listener<A extends any[]> = (...args: A) => void;
 
@@ -9,15 +9,15 @@ type _WildcardListener<
 export type WildcardListener<EM extends EventMap> = _WildcardListener<EM>;
 
 export type ListenerMap<EM extends EventMap> = Map<
-  keyof EM,
-  Set<Listener<EM[keyof EM]>>
+keyof EM,
+Set<Listener<EM[keyof EM]>>
 >;
 
 export class LiteEmit<EM extends EventMap = EventMap> {
   private listenerMap = new Map() as ListenerMap<EM>;
   private wildcardListeners = new Set<WildcardListener<EM>>();
 
-  on(event: "*", listener: WildcardListener<EM>): this;
+  on (event: "*", listener: WildcardListener<EM>): this;
   on<K extends keyof EM>(event: K, listener: Listener<EM[K]>): this;
   on<K extends keyof EM>(
     event: K | "*",
@@ -36,7 +36,7 @@ export class LiteEmit<EM extends EventMap = EventMap> {
     return this;
   }
 
-  once(event: "*", listener: WildcardListener<EM>): this;
+  once (event: "*", listener: WildcardListener<EM>): this;
   once<K extends keyof EM>(event: K, listener: Listener<EM[K]>): this;
   once<K extends keyof EM>(
     event: K | "*",
@@ -63,8 +63,8 @@ export class LiteEmit<EM extends EventMap = EventMap> {
     return this;
   }
 
-  off(): this;
-  off(event: "*", listener?: WildcardListener<EM>): this;
+  off (): this;
+  off (event: "*", listener?: WildcardListener<EM>): this;
   off<K extends keyof EM>(event: K, listener?: Listener<EM[K]>): this;
   off<K extends keyof EM>(
     event?: K | "*",
@@ -75,15 +75,19 @@ export class LiteEmit<EM extends EventMap = EventMap> {
       this.wildcardListeners.clear();
 
       return this;
+    // Event param is given
     } else if (event === "*") {
+      // Remove the specified listener
       if (listener) {
         this.wildcardListeners.delete(listener as WildcardListener<EM>);
+      // Clear all wildcard listners
       } else {
         this.wildcardListeners.clear();
       }
 
       return this;
     }
+    // The event param is defined and not a wildcard symbol
     if (listener) {
       this.listenerMap.get(event)?.delete(listener as any);
     } else {
