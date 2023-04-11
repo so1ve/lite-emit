@@ -1,19 +1,19 @@
-export interface EventMap { [key: string | symbol]: any[] }
+export type EventMap = Record<string | symbol, any[]>;
 
 export type Listener<A extends any[]> = (...args: A) => void;
 
-type _WildcardListener<EM extends EventMap, K extends keyof EM = keyof EM> = Listener<K extends unknown ? [K, ...EM[K]] : [K, ...EM[K]]>;
+type _WildcardListener<EM extends EventMap, K extends keyof EM = keyof EM> = Listener<[K, ...EM[K]]>;
 export type WildcardListener<EM extends EventMap> = _WildcardListener<EM>;
 
 export type ListenerMap<EM extends EventMap> = {
-  [K in keyof EM]?: Set<Listener<EM[K]>>
+  [K in keyof EM]?: Set<Listener<EM[K]>>;
 };
 
 export class LiteEmit<EM extends EventMap = EventMap> {
   private listenerMap = {} as ListenerMap<EM>;
   private wildcardListeners = new Set<WildcardListener<EM>>();
 
-  on (event: "*", listener: WildcardListener<EM>): this;
+  on(event: "*", listener: WildcardListener<EM>): this;
   on<K extends keyof EM>(event: K, listener: Listener<EM[K]>): this;
   on<K extends keyof EM>(event: K | "*", listener: Listener<EM[K]> | WildcardListener<EM>): this {
     if (event === "*") {
@@ -29,17 +29,18 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 
   emit<K extends keyof EM>(event: K, ...args: EM[K]): this {
     if (this.listenerMap[event]) {
-      this.wildcardListeners.forEach(listener => listener(...[event, ...args] as any));
+      // eslint-disable-next-line no-useless-call
+      this.wildcardListeners.forEach(listener => listener.apply(null, [event, ...args]));
       this.listenerMap[event]!.forEach(listener => listener(...args));
     }
     return this;
   }
 
-  off (event: "**"): this;
-  off (event: "*", listener?: WildcardListener<EM>): this;
+  off(): this;
+  off(event: "*", listener?: WildcardListener<EM>): this;
   off<K extends keyof EM>(event: K, listener?: Listener<EM[K]>): this;
-  off<K extends keyof EM>(event: K | "*" | "**", listener?: Listener<EM[K]> | WildcardListener<EM>): this {
-    if (event === "**") {
+  off<K extends keyof EM>(event?: K | "*", listener?: Listener<EM[K]> | WildcardListener<EM>): this {
+    if (event === undefined) {
       this.listenerMap = {} as any;
       this.wildcardListeners.clear();
       return this;

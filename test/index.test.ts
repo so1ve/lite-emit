@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { LiteEmit } from "../src/index";
 
 interface EventMap {
-  foo: [string]
-  bar: ["bar", number, symbol]
-  baz: [42]
+  foo: [string];
+  bar: ["bar", number, symbol];
+  baz: [42];
 }
 
 // @ts-expect-error i have no idea
@@ -93,7 +93,7 @@ describe("should", () => {
   });
 
   it("clear", () => {
-    emitter.off("**");
+    emitter.off();
     emitter.emit("bar", "bar", 42, Sym);
     expect(countBar).toBe(3);
   });

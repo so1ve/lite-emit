@@ -10,9 +10,9 @@ A simple, lightweight, and fast event emitter.
 import { LiteEmit } from "lite-emit";
 
 interface Events {
-  foo: [string]
-  bar: ["bar", number, symbol]
-  baz: [42]
+  foo: [string];
+  bar: ["bar", number, symbol];
+  baz: [42];
 }
 
 const emitter = new LiteEmit<Events>();
@@ -34,7 +34,9 @@ const fooListener3 = (str: string) => {
 emitter.on("foo", fooListener1);
 emitter.on("foo", fooListener2);
 emitter.on("foo", fooListener3).emit("foo", "hello");
-emitter.on("baz", (num) => { console.log(num); }).emit("baz", "42");
+emitter.on("baz", (num) => {
+  console.log(num);
+}).emit("baz", "42");
 // 42
 
 // Remove a specified listener for a specified event
