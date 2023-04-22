@@ -5,12 +5,10 @@ export type Listener<A extends any[]> = (...args: A) => void;
 type _WildcardListener<EM extends EventMap, K extends keyof EM = keyof EM> = Listener<[K, ...EM[K]]>;
 export type WildcardListener<EM extends EventMap> = _WildcardListener<EM>;
 
-export type ListenerMap<EM extends EventMap> = {
-  [K in keyof EM]?: Set<Listener<EM[K]>>;
-};
+export type ListenerMap<EM extends EventMap> = Map<keyof EM, Set<Listener<EM[keyof EM]>>>;
 
 export class LiteEmit<EM extends EventMap = EventMap> {
-  private listenerMap = {} as ListenerMap<EM>;
+  private listenerMap = new Map() as ListenerMap<EM>;
   private wildcardListeners = new Set<WildcardListener<EM>>();
 
   on(event: "*", listener: WildcardListener<EM>): this;
@@ -20,18 +18,18 @@ export class LiteEmit<EM extends EventMap = EventMap> {
       this.wildcardListeners.add(listener as WildcardListener<EM>);
       return this;
     }
-    if (!this.listenerMap[event]) {
-      this.listenerMap[event] = new Set();
+    if (!this.listenerMap.has(event)) {
+      this.listenerMap.set(event, new Set());
     }
-    this.listenerMap[event]!.add(listener as Listener<EM[K]>);
+    this.listenerMap.get(event)!.add(listener as any);
     return this;
   }
 
   emit<K extends keyof EM>(event: K, ...args: EM[K]): this {
-    if (this.listenerMap[event]) {
+    if (this.listenerMap.has(event)) {
       // eslint-disable-next-line no-useless-call
       this.wildcardListeners.forEach(listener => listener.apply(null, [event, ...args]));
-      this.listenerMap[event]!.forEach(listener => listener(...args));
+      this.listenerMap.get(event)!.forEach(listener => listener(...args));
     }
     return this;
   }
@@ -41,7 +39,7 @@ export class LiteEmit<EM extends EventMap = EventMap> {
   off<K extends keyof EM>(event: K, listener?: Listener<EM[K]>): this;
   off<K extends keyof EM>(event?: K | "*", listener?: Listener<EM[K]> | WildcardListener<EM>): this {
     if (event === undefined) {
-      this.listenerMap = {} as any;
+      this.listenerMap.clear();
       this.wildcardListeners.clear();
       return this;
     } else if (event === "*") {
@@ -53,9 +51,9 @@ export class LiteEmit<EM extends EventMap = EventMap> {
       return this;
     }
     if (listener) {
-      this.listenerMap[event]?.delete(listener as Listener<EM[K]>);
+      this.listenerMap.get(event)?.delete(listener as any);
     } else {
-      this.listenerMap[event]?.clear();
+      this.listenerMap.get(event)?.clear();
     }
     return this;
   }
