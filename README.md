@@ -58,7 +58,7 @@ emitter.emit("baz", 42);
 emitter.off("*");
 
 // Remove all listeners for all events
-emitter.off("**");
+emitter.off();
 ```
 
 ## License
