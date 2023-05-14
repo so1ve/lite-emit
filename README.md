@@ -17,26 +17,28 @@ interface Events {
 
 const emitter = new LiteEmit<Events>();
 
-const fooListener1 = (str: string) => {
+function fooListener1(str: string) {
   console.log(str);
-};
+}
 
-const fooListener2 = (str: string) => {
+function fooListener2(str: string) {
   console.log(str);
-};
+}
 
-const fooListener3 = (str: string) => {
+function fooListener3(str: string) {
   console.log(str);
-};
+}
 
 // Add listeners
 // Chainable
 emitter.on("foo", fooListener1);
 emitter.on("foo", fooListener2);
 emitter.on("foo", fooListener3).emit("foo", "hello");
-emitter.on("baz", (num) => {
-  console.log(num);
-}).emit("baz", "42");
+emitter
+  .on("baz", (num) => {
+    console.log(num);
+  })
+  .emit("baz", "42");
 // 42
 
 // Remove a specified listener for a specified event
