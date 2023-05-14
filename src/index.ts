@@ -27,7 +27,7 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 
   emit<K extends keyof EM>(event: K, ...args: EM[K]): this {
     if (this.listenerMap.has(event)) {
-      // eslint-disable-next-line no-useless-call
+      // eslint-disable-next-line no-useless-apply
       this.wildcardListeners.forEach(listener => listener.apply(null, [event, ...args]));
       this.listenerMap.get(event)!.forEach(listener => listener(...args));
     }
