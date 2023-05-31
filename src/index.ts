@@ -17,8 +17,6 @@ export class LiteEmit<EM extends EventMap = EventMap> {
   private listenerMap = new Map() as ListenerMap<EM>;
   private wildcardListeners = new Set<WildcardListener<EM>>();
 
-  on(event: "*", listener: WildcardListener<EM>): this;
-  on<K extends keyof EM>(event: K, listener: Listener<EM[K]>): this;
   on<K extends keyof EM>(
     event: K | "*",
     listener: Listener<EM[K]> | WildcardListener<EM>,
@@ -36,8 +34,6 @@ export class LiteEmit<EM extends EventMap = EventMap> {
     return this;
   }
 
-  once(event: "*", listener: WildcardListener<EM>): this;
-  once<K extends keyof EM>(event: K, listener: Listener<EM[K]>): this;
   once<K extends keyof EM>(
     event: K | "*",
     listener: Listener<EM[K]> | WildcardListener<EM>,
@@ -63,9 +59,6 @@ export class LiteEmit<EM extends EventMap = EventMap> {
     return this;
   }
 
-  off(): this;
-  off(event: "*", listener?: WildcardListener<EM>): this;
-  off<K extends keyof EM>(event: K, listener?: Listener<EM[K]>): this;
   off<K extends keyof EM>(
     event?: K | "*",
     listener?: Listener<EM[K]> | WildcardListener<EM>,
