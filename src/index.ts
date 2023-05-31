@@ -36,11 +36,24 @@ export class LiteEmit<EM extends EventMap = EventMap> {
     return this;
   }
 
+  once(event: "*", listener: WildcardListener<EM>): this;
+  once<K extends keyof EM>(event: K, listener: Listener<EM[K]>): this;
+  once<K extends keyof EM>(
+    event: K | "*",
+    listener: Listener<EM[K]> | WildcardListener<EM>,
+  ): this {
+    const onceListener = (...args: any[]) => {
+      this.off(event, onceListener);
+      listener(...args);
+    };
+
+    return this.on(event, onceListener);
+  }
+
   emit<K extends keyof EM>(event: K, ...args: EM[K]): this {
     if (this.listenerMap.has(event)) {
       for (const listener of this.wildcardListeners) {
-        // eslint-disable-next-line no-useless-call
-        listener.apply(null, [event, ...args]);
+        listener(event, ...args);
       }
       for (const listener of this.listenerMap.get(event)!) {
         listener(...args);
