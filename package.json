@@ -1,76 +1,78 @@
 {
-  "name": "lite-emit",
-  "version": "2.2.0",
-  "packageManager": "pnpm@8.6.12",
-  "author": "Ray <i@mk1.io> (@so1ve)",
-  "description": "A simple, lightweight, and fast event emitter.",
-  "keywords": [
-    "EventEmitter",
-    "EventEmitter2",
-    "EventEmitter3",
-    "Events",
-    "addEventListener",
-    "addListener",
-    "emit",
-    "on",
-    "emits",
-    "emitter",
-    "event",
-    "pub/sub",
-    "publish",
-    "reactor",
-    "subscribe"
-  ],
-  "homepage": "https://github.com/so1ve/lite-emit#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/so1ve/lite-emit.git"
-  },
-  "bugs": {
-    "url": "https://github.com/so1ve/lite-emit/issues"
-  },
-  "license": "MIT",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
-    }
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "rimraf dist && pkgroll",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prepublishOnly": "nr build",
-    "release": "bumpp --commit --push --tag && pnpm publish",
-    "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "watch": "pkgroll --watch"
-  },
-  "devDependencies": {
-    "@antfu/ni": "^0.21.3",
-    "@so1ve/eslint-config": "^0.97.0",
-    "@types/node": "^18.15.11",
-    "bumpp": "^9.1.0",
-    "eslint": "^8.38.0",
-    "pkgroll": "^1.10.0",
-    "typescript": "^5.0.4",
-    "vite": "^4.2.1",
-    "vitest": "^0.32.0"
-  }
+	"name": "lite-emit",
+	"version": "2.2.0",
+	"packageManager": "pnpm@8.6.12",
+	"author": "Ray <i@mk1.io> (@so1ve)",
+	"description": "A simple, lightweight, and fast event emitter.",
+	"keywords": [
+		"EventEmitter",
+		"EventEmitter2",
+		"EventEmitter3",
+		"Events",
+		"addEventListener",
+		"addListener",
+		"emit",
+		"emits",
+		"emitter",
+		"event",
+		"on",
+		"pub/sub",
+		"publish",
+		"reactor",
+		"subscribe"
+	],
+	"homepage": "https://github.com/so1ve/lite-emit#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/so1ve/lite-emit.git"
+	},
+	"bugs": {
+		"url": "https://github.com/so1ve/lite-emit/issues"
+	},
+	"license": "MIT",
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"require": "./dist/index.cjs",
+			"import": "./dist/index.mjs"
+		}
+	},
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"typesVersions": {
+		"*": {
+			"*": [
+				"./dist/*",
+				"./dist/index.d.ts"
+			]
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "rimraf dist && pkgroll",
+		"lint": "eslint . && prettier . --check",
+		"lint:fix": "eslint . --fix && prettier . --write",
+		"prepublishOnly": "nr build",
+		"release": "bumpp --commit --push --tag && pnpm publish",
+		"test": "vitest",
+		"typecheck": "tsc --noEmit",
+		"watch": "pkgroll --watch"
+	},
+	"devDependencies": {
+		"@antfu/ni": "^0.21.3",
+		"@so1ve/eslint-config": "^0.119.0",
+		"@so1ve/prettier-config": "^0.119.0",
+		"@types/node": "^18.15.11",
+		"bumpp": "^9.1.0",
+		"eslint": "^8.46.0",
+		"pkgroll": "^1.10.0",
+		"prettier": "3",
+		"typescript": "^5.0.4",
+		"vite": "^4.2.1",
+		"vitest": "^0.32.0"
+	}
 }
