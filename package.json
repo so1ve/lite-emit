@@ -73,6 +73,6 @@
 		"prettier": "3",
 		"typescript": "^5.0.4",
 		"vite": "^4.2.1",
-		"vitest": "^0.32.0"
+		"vitest": "^0.34.0"
 	}
 }
