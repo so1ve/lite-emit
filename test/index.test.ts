@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+qimport { describe, expect, it } from "vitest";
 
 import { LiteEmit } from "../src/index";
 
@@ -15,7 +15,7 @@ type EventMap = {
 const errorMsgs: string[] = [];
 
 const emitter = new LiteEmit<EventMap>({
-	errorHandler: (s) => errorMsgs.push(s),
+	errorHandler: (s: any) => errorMsgs.push(s.message),
 });
 
 const Sym = Symbol("d");
