@@ -13,16 +13,18 @@ export type ListenerMap<EM extends EventMap> = Map<
 	Set<Listener<EM[keyof EM]>>
 >;
 
-export interface LiteEmitOptions {
-	errorHandler?: (msg: string) => void;
+export type ErrorHandler=(e: unknown)=void
+
+export interface Options {
+	errorHandler?: ErrorHandler
 }
 
 export class LiteEmit<EM extends EventMap = EventMap> {
 	#listenerMap = new Map() as ListenerMap<EM>;
 	#wildcardListeners = new Set<WildcardListener<EM>>();
-	#errorHandler: ((msg: string) => void) | undefined;
+	#errorHandler: (ErrorHandler) | undefined;
 
-	constructor(options?: LiteEmitOptions) {
+	constructor(options?: Options) {
 		this.#errorHandler = options?.errorHandler;
 	}
 
@@ -66,11 +68,11 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 					const result = listener(event, ...args);
 					if (result instanceof Promise) {
 						result.catch((e) => {
-							this.#errorHandler?.(e.message);
+							this.#errorHandler?.(e);
 						});
 					}
-				} catch (e: any) {
-					this.#errorHandler?.(e.message);
+				} catch (e: unknown) {
+					this.#errorHandler?.(e);
 				}
 			}
 			for (const listener of this.#listenerMap.get(event)!) {
@@ -78,11 +80,11 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 					const result = listener(...args);
 					if (result instanceof Promise) {
 						result.catch((e) => {
-							this.#errorHandler?.(e.message);
+							this.#errorHandler?.(e);
 						});
 					}
-				} catch (e: any) {
-					this.#errorHandler?.(e.message);
+				} catch (e: unknown) {
+					this.#errorHandler?.(e);
 				}
 			}
 		}
