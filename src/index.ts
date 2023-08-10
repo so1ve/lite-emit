@@ -13,7 +13,7 @@ export type ListenerMap<EM extends EventMap> = Map<
 	Set<Listener<EM[keyof EM]>>
 >;
 
-export type ErrorHandler=(e: unknown)=void
+export type ErrorHandler=(e: unknown)=>void
 
 export interface Options {
 	errorHandler?: ErrorHandler
