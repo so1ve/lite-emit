@@ -13,16 +13,16 @@ export type ListenerMap<EM extends EventMap> = Map<
 	Set<Listener<EM[keyof EM]>>
 >;
 
-export type ErrorHandler=(e: unknown)=>void
+export type ErrorHandler = (e: unknown) => void;
 
 export interface Options {
-	errorHandler?: ErrorHandler
+	errorHandler?: ErrorHandler;
 }
 
 export class LiteEmit<EM extends EventMap = EventMap> {
 	#listenerMap = new Map() as ListenerMap<EM>;
 	#wildcardListeners = new Set<WildcardListener<EM>>();
-	#errorHandler: (ErrorHandler) | undefined;
+	#errorHandler: ErrorHandler | undefined;
 
 	constructor(options?: Options) {
 		this.#errorHandler = options?.errorHandler;
