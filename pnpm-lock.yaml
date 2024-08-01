@@ -19,7 +19,7 @@ devDependencies:
     version: 18.19.42
   bumpp:
     specifier: ^9.1.0
-    version: 9.4.1
+    version: 9.4.2
   eslint:
     specifier: ^8.46.0
     version: 8.57.0
@@ -1490,8 +1490,8 @@ packages:
       semver: 7.6.3
     dev: true
 
-  /bumpp@9.4.1:
-    resolution: {integrity: sha512-kzhp/LpNX0HkUpEyLd7sU2LTN/mbAVgcxJ1Zi2cAJTE/tul6rypSKGpH8UywDpzKWItL8LVdKsIFnwmylw0+7g==}
+  /bumpp@9.4.2:
+    resolution: {integrity: sha512-D0Cb5Mgxei7PObv4FkKQ19v1qSRhA3buQqCEQW6EU4+iort7JxL06DC6bZG5E0x/euZkaBuAQqOtFd2zIJKPjA==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
