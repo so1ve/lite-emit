@@ -16,7 +16,7 @@ devDependencies:
     version: 0.119.3(prettier@3.4.1)
   '@types/node':
     specifier: ^18.15.11
-    version: 18.19.66
+    version: 18.19.67
   bumpp:
     specifier: ^9.1.0
     version: 9.8.1
@@ -34,7 +34,7 @@ devDependencies:
     version: 5.7.2
   vite:
     specifier: ^4.2.1
-    version: 4.5.5(@types/node@18.19.66)
+    version: 4.5.5(@types/node@18.19.67)
   vitest:
     specifier: ^0.34.0
     version: 0.34.6
@@ -784,7 +784,7 @@ packages:
   /@types/concat-stream@2.0.3:
     resolution: {integrity: sha512-3qe4oQAPNwVNwK4C9c8u+VJqv9kez+2MR4qJpoPFfXtgxxif1QbFusvXzK0/Wra2VX07smostI2VMmJNSpZjuQ==}
     dependencies:
-      '@types/node': 18.19.66
+      '@types/node': 18.19.67
     dev: true
 
   /@types/debug@4.1.12:
@@ -827,8 +827,8 @@ packages:
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
     dev: true
 
-  /@types/node@18.19.66:
-    resolution: {integrity: sha512-14HmtUdGxFUalGRfLLn9Gc1oNWvWh5zNbsyOLo5JV6WARSeN1QcEBKRnZm9QqNfrutgsl/hY4eJW63aZ44aBCg==}
+  /@types/node@18.19.67:
+    resolution: {integrity: sha512-wI8uHusga+0ZugNp0Ol/3BqQfEcCCNfojtO6Oou9iVNGPTL6QNSdnUdqq85fRgIorLhLMuPIKpsN98QE9Nh+KQ==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -1936,7 +1936,7 @@ packages:
       es-errors: 1.3.0
       es-object-atoms: 1.0.0
       es-set-tostringtag: 2.0.3
-      es-to-primitive: 1.2.1
+      es-to-primitive: 1.3.0
       function.prototype.name: 1.1.6
       get-intrinsic: 1.2.4
       get-symbol-description: 1.0.2
@@ -1970,7 +1970,7 @@ packages:
       typed-array-byte-offset: 1.0.3
       typed-array-length: 1.0.7
       unbox-primitive: 1.0.2
-      which-typed-array: 1.1.15
+      which-typed-array: 1.1.16
     dev: true
 
   /es-define-property@1.0.0:
@@ -2011,8 +2011,8 @@ packages:
       hasown: 2.0.2
     dev: true
 
-  /es-to-primitive@1.2.1:
-    resolution: {integrity: sha512-QCOllgZJtaUo9miYBcLChTUaHNjJF3PYs1VidD7AwiEj1kYxKeQTctLAezAOH5ZKRH0g2IgPn6KwB4IT8iRpvA==}
+  /es-to-primitive@1.3.0:
+    resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
     dependencies:
       is-callable: 1.2.7
@@ -3430,7 +3430,7 @@ packages:
     resolution: {integrity: sha512-uZ25/bUAlUY5fR4OKT4rZQEBrzQWYV9ZJYGGsUmEJ6thodVJ1HX64ePQ6Z0qPWP+m+Uq6e9UugrE38jeYsDSMw==}
     engines: {node: '>= 0.4'}
     dependencies:
-      which-typed-array: 1.1.15
+      which-typed-array: 1.1.16
     dev: true
 
   /is-weakmap@2.0.2:
@@ -5361,7 +5361,7 @@ packages:
       '@types/concat-stream': 2.0.3
       '@types/debug': 4.1.12
       '@types/is-empty': 1.2.3
-      '@types/node': 18.19.66
+      '@types/node': 18.19.67
       '@types/unist': 2.0.11
       concat-stream: 2.0.0
       debug: 4.3.7
@@ -5524,7 +5524,7 @@ packages:
       vfile-message: 3.1.4
     dev: true
 
-  /vite-node@0.34.6(@types/node@18.19.66):
+  /vite-node@0.34.6(@types/node@18.19.67):
     resolution: {integrity: sha512-nlBMJ9x6n7/Amaz6F3zJ97EBwR2FkzhBRxF5e+jE6LA3yi6Wtc2lyTij1OnDMIr34v5g/tVQtsVAzhT0jc5ygA==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -5534,7 +5534,7 @@ packages:
       mlly: 1.7.3
       pathe: 1.1.2
       picocolors: 1.1.1
-      vite: 4.5.5(@types/node@18.19.66)
+      vite: 4.5.5(@types/node@18.19.67)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5546,7 +5546,7 @@ packages:
       - terser
     dev: true
 
-  /vite@4.5.5(@types/node@18.19.66):
+  /vite@4.5.5(@types/node@18.19.67):
     resolution: {integrity: sha512-ifW3Lb2sMdX+WU91s3R0FyQlAyLxOzCSCP37ujw0+r5POeHPwe6udWVIElKQq8gk3t7b8rkmvqC6IHBpCff4GQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -5574,7 +5574,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.19.66
+      '@types/node': 18.19.67
       esbuild: 0.18.20
       postcss: 8.4.49
       rollup: 3.29.5
@@ -5615,7 +5615,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.20
       '@types/chai-subset': 1.3.5
-      '@types/node': 18.19.66
+      '@types/node': 18.19.67
       '@vitest/expect': 0.34.6
       '@vitest/runner': 0.34.6
       '@vitest/snapshot': 0.34.6
@@ -5634,8 +5634,8 @@ packages:
       strip-literal: 1.3.0
       tinybench: 2.9.0
       tinypool: 0.7.0
-      vite: 4.5.5(@types/node@18.19.66)
-      vite-node: 0.34.6(@types/node@18.19.66)
+      vite: 4.5.5(@types/node@18.19.67)
+      vite-node: 0.34.6(@types/node@18.19.67)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - less
@@ -5695,7 +5695,7 @@ packages:
       isarray: 2.0.5
       which-boxed-primitive: 1.0.2
       which-collection: 1.0.2
-      which-typed-array: 1.1.15
+      which-typed-array: 1.1.16
     dev: true
 
   /which-collection@1.0.2:
@@ -5708,8 +5708,8 @@ packages:
       is-weakset: 2.0.3
     dev: true
 
-  /which-typed-array@1.1.15:
-    resolution: {integrity: sha512-oV0jmFtUky6CXfkqehVvBP/LSWJ2sy4vWMioiENyJLePrBO/yKyV9OyJySfAKosh+RYkIl5zJCNZ8/4JncrpdA==}
+  /which-typed-array@1.1.16:
+    resolution: {integrity: sha512-g+N+GAWiRj66DngFwHvISJd+ITsyphZvD1vChfVg6cEdnzy53GzB3oy0fUNlvhz7H7+MiqhYr26qxQShCpKTTQ==}
     engines: {node: '>= 0.4'}
     dependencies:
       available-typed-arrays: 1.0.7
