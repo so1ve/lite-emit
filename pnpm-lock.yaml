@@ -19,7 +19,7 @@ devDependencies:
     version: 18.19.71
   bumpp:
     specifier: ^9.1.0
-    version: 9.10.1
+    version: 9.10.2
   eslint:
     specifier: ^8.46.0
     version: 8.57.1
@@ -1442,8 +1442,8 @@ packages:
       semver: 7.6.3
     dev: true
 
-  /bumpp@9.10.1:
-    resolution: {integrity: sha512-KG7oQmv6cz7QQwOvM3x/yPcF8+VBEtuLEEecmohNyb4+bLbtSVpJp8brjzcZYQN7UOyR4i0qIIYThnsBgP8uCA==}
+  /bumpp@9.10.2:
+    resolution: {integrity: sha512-QX1JdswFLLVgrA+I/t+926/jsuJ92BTKKxGvMYC6fg+1lFpCl9RbILQJg0thc5UirIjQ6/jY1Sj+b4tz3evA5g==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -2985,7 +2985,7 @@ packages:
       citty: 0.1.6
       consola: 3.4.0
       defu: 6.1.4
-      node-fetch-native: 1.6.4
+      node-fetch-native: 1.6.6
       nypm: 0.3.12
       ohash: 1.1.4
       pathe: 1.1.2
@@ -4196,8 +4196,8 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
-  /node-fetch-native@1.6.4:
-    resolution: {integrity: sha512-IhOigYzAKHd244OC0JIMIUrjzctirCmPkaIfhDeGcEETWof5zKYUW7e7MYvChGWh/4CJeXEgsRyGzuF334rOOQ==}
+  /node-fetch-native@1.6.6:
+    resolution: {integrity: sha512-8Mc2HhqPdlIfedsuZoc3yioPuzp6b+L5jRCRY1QzuWZh2EGJVQrGppC6V6cF0bLdbW0+O2YpqCA25aF/1lvipQ==}
     dev: true
 
   /nopt@7.2.1:
