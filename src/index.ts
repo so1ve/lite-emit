@@ -14,6 +14,8 @@ export interface Options {
 	errorHandler?: ErrorHandler;
 }
 
+type OffFunction = () => void;
+
 export class LiteEmit<EM extends EventMap = EventMap> {
 	#listenerMap = new Map<keyof EM, Listener<EM[keyof EM]>[]>();
 	#wildcardListeners: WildcardListener<EM>[] = [];
@@ -23,19 +25,23 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 		this.#errorHandler = options?.errorHandler;
 	}
 
-	public on(event: "*", listener: WildcardListener<EM>): this;
-	public on<K extends keyof EM>(event: K, listener: Listener<EM[K]>): this;
+	public on(event: "*", listener: WildcardListener<EM>): OffFunction;
+	public on<K extends keyof EM>(
+		event: K,
+		listener: Listener<EM[K]>,
+	): OffFunction;
 	public on<K extends keyof EM>(
 		event: K | "*",
 		listener: Listener<EM[K]> | WildcardListener<EM>,
-	): this {
+	): OffFunction {
 		if (event === "*") {
 			if (!this.#wildcardListeners.includes(listener as any)) {
 				this.#wildcardListeners.push(listener as any);
 			}
 
-			return this;
+			return () => this.off("*", listener as any);
 		}
+
 		if (!this.#listenerMap.has(event)) {
 			this.#listenerMap.set(event, []);
 		}
@@ -44,69 +50,62 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 			listeners.push(listener as any);
 		}
 
-		return this;
+		return () => this.off(event, listener as any);
 	}
 
-	public once(event: "*", listener: WildcardListener<EM>): this;
-	public once<K extends keyof EM>(event: K, listener: Listener<EM[K]>): this;
+	public once(event: "*", listener: WildcardListener<EM>): void;
+	public once<K extends keyof EM>(event: K, listener: Listener<EM[K]>): void;
 	public once<K extends keyof EM>(
 		event: K | "*",
 		listener: Listener<EM[K]> | WildcardListener<EM>,
-	): this {
+	): void {
 		const onceListener = (...args: any[]) => {
 			this.off(event, onceListener);
 			listener(...args);
 		};
 
-		return this.on(event, onceListener);
+		this.on(event, onceListener);
 	}
 
-	public emit<K extends keyof EM>(event: K, ...args: EM[K]): this {
+	#callListenerWithErrorHandler(listener: Listener<any>, args: any[]): void {
+		try {
+			const result = listener(...args);
+			if (result instanceof Promise) {
+				result.catch((e) => {
+					this.#errorHandler?.(e);
+				});
+			}
+		} catch (e: unknown) {
+			this.#errorHandler?.(e);
+		}
+	}
+
+	public emit<K extends keyof EM>(event: K, ...args: EM[K]): void {
 		const listeners = this.#listenerMap.get(event);
 		if (listeners) {
 			if (this.#wildcardListeners.length > 0) {
 				for (const listener of this.#wildcardListeners) {
-					try {
-						const result = listener(event, ...args);
-						if (result instanceof Promise) {
-							result.catch((e) => {
-								this.#errorHandler?.(e);
-							});
-						}
-					} catch (e: unknown) {
-						this.#errorHandler?.(e);
-					}
+					this.#callListenerWithErrorHandler(listener, [event, ...args]);
 				}
 			}
 			for (const listener of listeners) {
-				try {
-					const result = listener(...args);
-					if (result instanceof Promise) {
-						result.catch((e) => {
-							this.#errorHandler?.(e);
-						});
-					}
-				} catch (e: unknown) {
-					this.#errorHandler?.(e);
-				}
+				this.#callListenerWithErrorHandler(listener, args);
 			}
 		}
-
-		return this;
 	}
 
-	public off(): this;
-	public off(event: "*", listener?: WildcardListener<EM>): this;
-	public off<K extends keyof EM>(event: K, listener?: Listener<EM[K]>): this;
+	public off(): void;
+	public off(event: "*", listener?: WildcardListener<EM>): void;
+	public off<K extends keyof EM>(event: K, listener?: Listener<EM[K]>): void;
 	public off<K extends keyof EM>(
 		event?: K | "*",
 		listener?: Listener<EM[K]> | WildcardListener<EM>,
-	): this {
+	): void {
 		if (event === undefined) {
 			this.#listenerMap.clear();
 			this.#wildcardListeners.length = 0;
 
-			return this;
+			return;
 			// Event param is given
 		} else if (event === "*") {
 			// Remove the specified listener
@@ -120,7 +119,7 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 				this.#wildcardListeners.length = 0;
 			}
 
-			return this;
+			return;
 		}
 		// The event param is defined and not a wildcard symbol
 		if (listener) {
@@ -134,7 +133,5 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 		} else {
 			this.#listenerMap.delete(event);
 		}
-
-		return this;
 	}
 }
