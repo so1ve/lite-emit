@@ -8,11 +8,6 @@ type _WildcardListener<
 > = Listener<[K, ...EM[K]]>;
 export type WildcardListener<EM extends EventMap> = _WildcardListener<EM>;
 
-export type ListenerMap<EM extends EventMap> = Map<
-	keyof EM,
-	Set<Listener<EM[keyof EM]>>
->;
-
 export type ErrorHandler = (e: unknown) => void;
 
 export interface Options {
@@ -20,8 +15,8 @@ export interface Options {
 }
 
 export class LiteEmit<EM extends EventMap = EventMap> {
-	#listenerMap = new Map() as ListenerMap<EM>;
-	#wildcardListeners = new Set<WildcardListener<EM>>();
+	#listenerMap = new Map<keyof EM, Listener<EM[keyof EM]>[]>();
+	#wildcardListeners: WildcardListener<EM>[] = [];
 	#errorHandler: ErrorHandler | undefined;
 
 	constructor(options?: Options) {
@@ -35,14 +30,19 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 		listener: Listener<EM[K]> | WildcardListener<EM>,
 	): this {
 		if (event === "*") {
-			this.#wildcardListeners.add(listener as WildcardListener<EM>);
+			if (!this.#wildcardListeners.includes(listener as any)) {
+				this.#wildcardListeners.push(listener as any);
+			}
 
 			return this;
 		}
 		if (!this.#listenerMap.has(event)) {
-			this.#listenerMap.set(event, new Set());
+			this.#listenerMap.set(event, []);
 		}
-		this.#listenerMap.get(event)!.add(listener as any);
+		const listeners = this.#listenerMap.get(event)!;
+		if (!listeners.includes(listener as any)) {
+			listeners.push(listener as any);
+		}
 
 		return this;
 	}
@@ -62,20 +62,23 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 	}
 
 	public emit<K extends keyof EM>(event: K, ...args: EM[K]): this {
-		if (this.#listenerMap.has(event)) {
-			for (const listener of this.#wildcardListeners) {
-				try {
-					const result = listener(event, ...args);
-					if (result instanceof Promise) {
-						result.catch((e) => {
-							this.#errorHandler?.(e);
-						});
+		const listeners = this.#listenerMap.get(event);
+		if (listeners) {
+			if (this.#wildcardListeners.length > 0) {
+				for (const listener of this.#wildcardListeners) {
+					try {
+						const result = listener(event, ...args);
+						if (result instanceof Promise) {
+							result.catch((e) => {
+								this.#errorHandler?.(e);
+							});
+						}
+					} catch (e: unknown) {
+						this.#errorHandler?.(e);
 					}
-				} catch (e: unknown) {
-					this.#errorHandler?.(e);
 				}
 			}
-			for (const listener of this.#listenerMap.get(event)!) {
+			for (const listener of listeners) {
 				try {
 					const result = listener(...args);
 					if (result instanceof Promise) {
@@ -101,26 +104,35 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 	): this {
 		if (event === undefined) {
 			this.#listenerMap.clear();
-			this.#wildcardListeners.clear();
+			this.#wildcardListeners.length = 0;
 
 			return this;
 			// Event param is given
 		} else if (event === "*") {
 			// Remove the specified listener
 			if (listener) {
-				this.#wildcardListeners.delete(listener as WildcardListener<EM>);
+				const index = this.#wildcardListeners.indexOf(listener as any);
+				if (index !== -1) {
+					this.#wildcardListeners.splice(index, 1);
+				}
 				// Clear all wildcard listners
 			} else {
-				this.#wildcardListeners.clear();
+				this.#wildcardListeners.length = 0;
 			}
 
 			return this;
 		}
 		// The event param is defined and not a wildcard symbol
 		if (listener) {
-			this.#listenerMap.get(event)?.delete(listener as any);
+			const listeners = this.#listenerMap.get(event);
+			if (listeners) {
+				const index = listeners.indexOf(listener as any);
+				if (index !== -1) {
+					listeners.splice(index, 1);
+				}
+			}
 		} else {
-			this.#listenerMap.get(event)?.clear();
+			this.#listenerMap.delete(event);
 		}
 
 		return this;
