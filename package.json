@@ -51,6 +51,7 @@
 		"dist"
 	],
 	"scripts": {
+		"bench": "vitest bench",
 		"build": "tsdown",
 		"lint": "eslint . && prettier . --check",
 		"lint:fix": "eslint . --fix && prettier . --write",
@@ -67,7 +68,12 @@
 		"@types/node": "^24.10.1",
 		"@typescript/native-preview": "7.0.0-dev.20251206.1",
 		"bumpp": "^10.3.2",
+		"emittery": "^1.2.0",
 		"eslint": "^9.39.1",
+		"event-lite": "^1.0.0",
+		"eventemitter3": "^5.0.1",
+		"mitt": "^3.0.1",
+		"nanoevents": "^9.1.0",
 		"prettier": "^3.7.4",
 		"tsdown": "^0.17.0",
 		"typescript": "^5.9.3",
