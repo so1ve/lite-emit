@@ -27,7 +27,7 @@ let count4 = 0;
 let count5 = 0;
 
 describe("should", () => {
-	const wildcardEvents: any[] = [];
+	let wildcardCount = 0;
 	function bazListener1(num: number) {
 		count3++;
 
@@ -38,11 +38,11 @@ describe("should", () => {
 
 		expect(num).toBe(42);
 	}
-	function wildcardListener1(...args: any[]) {
-		wildcardEvents.push(args);
+	function wildcardListener1() {
+		wildcardCount++;
 	}
-	function wildcardListener2(...args: any[]) {
-		wildcardEvents.push(args);
+	function wildcardListener2() {
+		wildcardCount++;
 	}
 
 	it("on", () => {
@@ -58,8 +58,15 @@ describe("should", () => {
 			expect(num).toBe(42);
 			expect(symbol).toBe(Sym);
 		});
-		// Chainable
-		emitter.on("baz", bazListener1).on("baz", bazListener2);
+		emitter.on("baz", bazListener1);
+		emitter.on("baz", bazListener2);
+	});
+
+	it("off function", () => {
+		const offFoo = emitter.on("foo", () => {
+			count1++;
+		});
+		offFoo();
 	});
 
 	it("on wildcard", () => {
@@ -78,7 +85,9 @@ describe("should", () => {
 	});
 
 	it("emit", () => {
-		emitter.emit("foo", "foo").emit("bar", "bar", 42, Sym).emit("baz", 42);
+		emitter.emit("foo", "foo");
+		emitter.emit("bar", "bar", 42, Sym);
+		emitter.emit("baz", 42);
 	});
 
 	it("off", () => {
@@ -117,7 +126,7 @@ describe("should", () => {
 	});
 
 	it("on wildcard listens all events", () => {
-		expect(wildcardEvents).toHaveLength(15);
+		expect(wildcardCount).toBe(15);
 	});
 
 	it("clear", () => {
@@ -128,21 +137,19 @@ describe("should", () => {
 	});
 
 	it("errorHandler", () => {
-		emitter
-			.on("error", () => {
-				throw new Error("Foo");
-			})
-			.emit("error");
+		emitter.on("error", () => {
+			throw new Error("Foo");
+		});
+		emitter.emit("error");
 
 		expect(errorMsgs[0]).toBe("Foo");
 	});
 
 	it("errorHandler async", () => {
-		emitter
-			.on("error2", async () => {
-				throw new Error("Bar");
-			})
-			.emit("error2");
+		emitter.on("error2", async () => {
+			throw new Error("Bar");
+		});
+		emitter.emit("error2");
 
 		// Wait for async action
 		setTimeout(() => {
