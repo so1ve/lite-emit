@@ -1,12 +1,8 @@
-export type EventMap = Record<string | symbol, any[]>;
+export type EventMap = Record<PropertyKey, any[]>;
 
 export type Listener<A extends any[]> = (...args: A) => void | Promise<void>;
 
-type _WildcardListener<
-	EM extends EventMap,
-	K extends keyof EM = keyof EM,
-> = Listener<[K, ...EM[K]]>;
-export type WildcardListener<EM extends EventMap> = _WildcardListener<EM>;
+export type WildcardListener = Listener<[event: string, ...args: string[]]>;
 
 export type ErrorHandler = (e: unknown) => void;
 
@@ -18,21 +14,21 @@ type OffFunction = () => void;
 
 export class LiteEmit<EM extends EventMap = EventMap> {
 	#listenerMap = new Map<keyof EM, Listener<EM[keyof EM]>[]>();
-	#wildcardListeners: WildcardListener<EM>[] = [];
+	#wildcardListeners: WildcardListener[] = [];
 	#errorHandler: ErrorHandler | undefined;
 
 	constructor(options?: Options) {
 		this.#errorHandler = options?.errorHandler;
 	}
 
-	public on(event: "*", listener: WildcardListener<EM>): OffFunction;
+	public on(event: "*", listener: WildcardListener): OffFunction;
 	public on<K extends keyof EM>(
 		event: K,
 		listener: Listener<EM[K]>,
 	): OffFunction;
 	public on<K extends keyof EM>(
 		event: K | "*",
-		listener: Listener<EM[K]> | WildcardListener<EM>,
+		listener: Listener<EM[K]> | WildcardListener,
 	): OffFunction {
 		if (event === "*") {
 			if (!this.#wildcardListeners.includes(listener as any)) {
@@ -53,14 +49,14 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 		return () => this.off(event, listener as any);
 	}
 
-	public once(event: "*", listener: WildcardListener<EM>): OffFunction;
+	public once(event: "*", listener: WildcardListener): OffFunction;
 	public once<K extends keyof EM>(
 		event: K,
 		listener: Listener<EM[K]>,
 	): OffFunction;
 	public once<K extends keyof EM>(
 		event: K | "*",
-		listener: Listener<EM[K]> | WildcardListener<EM>,
+		listener: Listener<EM[K]> | WildcardListener,
 	): OffFunction {
 		const onceListener = (...args: any[]) => {
 			this.off(event, onceListener);
@@ -98,11 +94,11 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 	}
 
 	public off(): void;
-	public off(event: "*", listener?: WildcardListener<EM>): void;
+	public off(event: "*", listener?: WildcardListener): void;
 	public off<K extends keyof EM>(event: K, listener?: Listener<EM[K]>): void;
 	public off<K extends keyof EM>(
 		event?: K | "*",
-		listener?: Listener<EM[K]> | WildcardListener<EM>,
+		listener?: Listener<EM[K]> | WildcardListener,
 	): void {
 		if (event === undefined) {
 			this.#listenerMap.clear();
