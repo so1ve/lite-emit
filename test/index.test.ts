@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { LiteEmit } from "../src";
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+// eslint-disable-next-line ts/consistent-type-definitions
 type EventMap = {
 	foo: [string];
 	bar: ["bar", number, symbol];

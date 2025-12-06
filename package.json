@@ -1,8 +1,9 @@
 {
 	"name": "lite-emit",
 	"version": "2.3.0",
-	"packageManager": "pnpm@8.15.9",
+	"packageManager": "pnpm@10.24.0",
 	"author": "Ray <i@mk1.io> (@so1ve)",
+	"type": "module",
 	"description": "A simple, lightweight, and fast event emitter.",
 	"keywords": [
 		"EventEmitter",
@@ -18,6 +19,7 @@
 		"on",
 		"pub/sub",
 		"publish",
+		"pubsub",
 		"reactor",
 		"subscribe"
 	],
@@ -32,15 +34,11 @@
 	"license": "MIT",
 	"sideEffects": false,
 	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"require": "./dist/index.cjs",
-			"import": "./dist/index.mjs"
-		}
+		".": "./dist/index.js"
 	},
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.ts",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "dist/index.d.ts",
 	"typesVersions": {
 		"*": {
 			"*": [
@@ -53,26 +51,27 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "rimraf dist && pkgroll",
+		"build": "tsdown",
 		"lint": "eslint . && prettier . --check",
 		"lint:fix": "eslint . --fix && prettier . --write",
 		"prepublishOnly": "nr build",
 		"release": "bumpp --commit --push --tag && pnpm publish",
 		"test": "vitest",
-		"typecheck": "tsc --noEmit",
-		"watch": "pkgroll --watch"
+		"typecheck": "tsgo --noEmit",
+		"watch": "tsdown --watch"
 	},
 	"devDependencies": {
-		"@antfu/ni": "^0.21.3",
-		"@so1ve/eslint-config": "^0.120.0",
-		"@so1ve/prettier-config": "^0.119.0",
-		"@types/node": "^18.15.11",
-		"bumpp": "^9.1.0",
-		"eslint": "^8.46.0",
-		"pkgroll": "^1.10.0",
-		"prettier": "3",
-		"typescript": "^5.0.4",
-		"vite": "^4.2.1",
-		"vitest": "^0.34.0"
+		"@antfu/ni": "^28.0.0",
+		"@so1ve/eslint-config": "^3.17.0",
+		"@so1ve/prettier-config": "^3.17.0",
+		"@types/node": "^24.10.1",
+		"@typescript/native-preview": "7.0.0-dev.20251206.1",
+		"bumpp": "^10.3.2",
+		"eslint": "^9.39.1",
+		"prettier": "^3.7.4",
+		"tsdown": "^0.17.0",
+		"typescript": "^5.9.3",
+		"vite": "^7.2.6",
+		"vitest": "^4.0.15"
 	}
 }

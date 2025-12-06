@@ -15,13 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.4.1
+      - name: Setup PNPM
+        run: corepack enable
 
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 24.x
           cache: pnpm
 
       - name: Setup
@@ -38,13 +38,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.4.1
+      - name: Setup PNPM
+        run: corepack enable
 
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 24.x
           cache: pnpm
 
       - name: Setup
@@ -61,15 +61,15 @@ jobs:
 
     strategy:
       matrix:
-        node: [16.x, 18.x]
+        node: [22.x, 24.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.4.1
+      - name: Setup PNPM
+        run: corepack enable
 
       - name: Set node version to ${{ matrix.node }}
         uses: actions/setup-node@v3
