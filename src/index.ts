@@ -53,18 +53,21 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 		return () => this.off(event, listener as any);
 	}
 
-	public once(event: "*", listener: WildcardListener<EM>): void;
-	public once<K extends keyof EM>(event: K, listener: Listener<EM[K]>): void;
+	public once(event: "*", listener: WildcardListener<EM>): OffFunction;
+	public once<K extends keyof EM>(
+		event: K,
+		listener: Listener<EM[K]>,
+	): OffFunction;
 	public once<K extends keyof EM>(
 		event: K | "*",
 		listener: Listener<EM[K]> | WildcardListener<EM>,
-	): void {
+	): OffFunction {
 		const onceListener = (...args: any[]) => {
 			this.off(event, onceListener);
 			listener(...args);
 		};
 
-		this.on(event, onceListener);
+		return this.on(event, onceListener);
 	}
 
 	#callListenerWithErrorHandler(listener: Listener<any>, args: any[]): void {
