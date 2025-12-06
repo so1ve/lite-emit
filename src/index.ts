@@ -84,13 +84,13 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 	}
 
 	public emit<K extends keyof EM>(event: K, ...args: EM[K]): void {
+		if (this.#wildcardListeners.length > 0) {
+			for (const listener of this.#wildcardListeners) {
+				this.#callListenerWithErrorHandler(listener, [event, ...args]);
+			}
+		}
 		const listeners = this.#listenerMap.get(event);
 		if (listeners) {
-			if (this.#wildcardListeners.length > 0) {
-				for (const listener of this.#wildcardListeners) {
-					this.#callListenerWithErrorHandler(listener, [event, ...args]);
-				}
-			}
 			for (const listener of listeners) {
 				this.#callListenerWithErrorHandler(listener, args);
 			}
