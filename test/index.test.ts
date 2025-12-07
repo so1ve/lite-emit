@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { LiteEmit } from "../src";
+import { LiteEmit, chain } from "../src";
 
 // eslint-disable-next-line ts/consistent-type-definitions
 type EventMap = {
@@ -155,5 +155,101 @@ describe("should", () => {
 		setTimeout(() => {
 			expect(errorMsgs[1]).toBe("Bar");
 		}, 500);
+	});
+});
+
+describe("chain", () => {
+	const Sym = Symbol("d");
+
+	it("should be chainable and work correctly", () => {
+		const emitter = new LiteEmit<EventMap>();
+		const chained = chain(emitter);
+		let onCount = 0;
+		let onceCount = 0;
+
+		chained
+			.on("foo", (str) => {
+				onCount++;
+
+				expect(str).toBe("foo");
+			})
+			.once("bar", (str, num, symbol) => {
+				onceCount++;
+
+				expect(str).toBe("bar");
+				expect(num).toBe(42);
+				expect(symbol).toBe(Sym);
+			});
+
+		chained.emit("foo", "foo");
+
+		expect(onCount).toBe(1);
+
+		chained.emit("bar", "bar", 42, Sym);
+
+		expect(onceCount).toBe(1);
+
+		// once should not trigger again
+		chained.emit("bar", "bar", 42, Sym);
+
+		expect(onceCount).toBe(1);
+
+		// off should work
+		chained.off("foo").emit("foo", "foo");
+
+		expect(onCount).toBe(1);
+	});
+
+	it("should handle wildcard listeners", () => {
+		const emitter = new LiteEmit<EventMap>();
+		const chained = chain(emitter);
+		let wildcardCount = 0;
+
+		chained
+			.on("*", () => {
+				wildcardCount++;
+			})
+			.emit("foo", "foo")
+			.emit("bar", "bar", 42, Sym);
+
+		expect(wildcardCount).toBe(2);
+
+		chained.off("*").emit("foo", "foo");
+
+		expect(wildcardCount).toBe(2);
+	});
+
+	it("should handle off() to clear all listeners", () => {
+		const emitter = new LiteEmit<EventMap>();
+		const chained = chain(emitter);
+		let count = 0;
+		chained
+			.on("foo", () => {
+				count++;
+			})
+			.emit("foo", "foo");
+
+		expect(count).toBe(1);
+
+		chained.off().emit("foo", "foo");
+
+		expect(count).toBe(1);
+	});
+
+	it("should unwrap to the original emitter", () => {
+		const emitter = new LiteEmit<EventMap>();
+		const chained = chain(emitter);
+
+		expect(chained.unwrap()).toBe(emitter);
+
+		// Verify that operations on the unwrapped emitter are reflected
+		let count = 0;
+		chained
+			.on("foo", () => {
+				count++;
+			})
+			.emit("foo", "foo");
+
+		expect(count).toBe(1);
 	});
 });
