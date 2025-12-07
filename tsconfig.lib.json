@@ -5,5 +5,5 @@
 		"noEmit": true,
 		"isolatedDeclarations": true
 	},
-	"include": ["src", "tsdown.config.ts"]
+	"include": ["src"]
 }
