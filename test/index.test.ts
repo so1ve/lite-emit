@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { LiteEmit, chain } from "../src";
+import { LiteEmit } from "../src";
 
 // eslint-disable-next-line ts/consistent-type-definitions
 type EventMap = {
@@ -10,13 +10,13 @@ type EventMap = {
 	faq: [];
 	error: [];
 	error2: [];
+	asyncEvent: [string];
+	asyncEvent2: [number];
+	concurrentEvent: [string];
+	promiseErrorEvent: [];
 };
 
-const errorMsgs: string[] = [];
-
-const emitter = new LiteEmit<EventMap>({
-	errorHandler: (s: any) => errorMsgs.push(s.message),
-});
+const emitter = new LiteEmit<EventMap>();
 
 const Sym = Symbol("d");
 
@@ -136,120 +136,89 @@ describe("should", () => {
 		expect(count2).toBe(3);
 	});
 
-	it("errorHandler", () => {
-		emitter.on("error", () => {
-			throw new Error("Foo");
-		});
-		emitter.emit("error");
+	describe("await functionality", () => {
+		it("should handle async listeners", async () => {
+			let asyncResult = "";
 
-		expect(errorMsgs[0]).toBe("Foo");
-	});
-
-	it("errorHandler async", () => {
-		emitter.on("error2", async () => {
-			throw new Error("Bar");
-		});
-		emitter.emit("error2");
-
-		// Wait for async action
-		setTimeout(() => {
-			expect(errorMsgs[1]).toBe("Bar");
-		}, 500);
-	});
-});
-
-describe("chain", () => {
-	const Sym = Symbol("d");
-
-	it("should be chainable and work correctly", () => {
-		const emitter = new LiteEmit<EventMap>();
-		const chained = chain(emitter);
-		let onCount = 0;
-		let onceCount = 0;
-
-		chained
-			.on("foo", (str) => {
-				onCount++;
-
-				expect(str).toBe("foo");
-			})
-			.once("bar", (str, num, symbol) => {
-				onceCount++;
-
-				expect(str).toBe("bar");
-				expect(num).toBe(42);
-				expect(symbol).toBe(Sym);
+			emitter.on("asyncEvent", async (str: string) => {
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				asyncResult = `${str}-processed`;
 			});
 
-		chained.emit("foo", "foo");
+			await emitter.emit("asyncEvent", "test");
 
-		expect(onCount).toBe(1);
+			expect(asyncResult).toBe("test-processed");
+		});
 
-		chained.emit("bar", "bar", 42, Sym);
+		it("should return a Promise that can be awaited", async () => {
+			const executionOrder: number[] = [];
 
-		expect(onceCount).toBe(1);
+			emitter.on("asyncEvent2", async (_num: number) => {
+				executionOrder.push(1);
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				executionOrder.push(2);
+			});
 
-		// once should not trigger again
-		chained.emit("bar", "bar", 42, Sym);
+			const promise = emitter.emit("asyncEvent2", 42);
 
-		expect(onceCount).toBe(1);
+			expect(promise).toBeInstanceOf(Promise);
 
-		// off should work
-		chained.off("foo").emit("foo", "foo");
+			await promise;
 
-		expect(onCount).toBe(1);
-	});
+			expect(executionOrder).toEqual([1, 2]);
+		});
 
-	it("should handle wildcard listeners", () => {
-		const emitter = new LiteEmit<EventMap>();
-		const chained = chain(emitter);
-		let wildcardCount = 0;
+		it("should execute multiple async listeners concurrently", async () => {
+			const startTime = Date.now();
+			const delays: number[] = [];
 
-		chained
-			.on("*", () => {
-				wildcardCount++;
-			})
-			.emit("foo", "foo")
-			.emit("bar", "bar", 42, Sym);
+			emitter.on("concurrentEvent", async (_str: string) => {
+				const start = Date.now();
+				await new Promise((resolve) => setTimeout(resolve, 50));
+				delays.push(Date.now() - start);
+			});
 
-		expect(wildcardCount).toBe(2);
+			emitter.on("concurrentEvent", async (_str: string) => {
+				const start = Date.now();
+				await new Promise((resolve) => setTimeout(resolve, 30));
+				delays.push(Date.now() - start);
+			});
 
-		chained.off("*").emit("foo", "foo");
+			await emitter.emit("concurrentEvent", "test");
+			const totalTime = Date.now() - startTime;
 
-		expect(wildcardCount).toBe(2);
-	});
+			// 并发执行，总时间应该接近最长的单个监听器时间，而不是所有时间的总和
+			expect(totalTime).toBeLessThan(80); // 50ms + 30ms = 80ms，但并发执行应该更少
+			expect(delays).toHaveLength(2);
+		});
 
-	it("should handle off() to clear all listeners", () => {
-		const emitter = new LiteEmit<EventMap>();
-		const chained = chain(emitter);
-		let count = 0;
-		chained
-			.on("foo", () => {
-				count++;
-			})
-			.emit("foo", "foo");
+		it("should handle errors in async listeners", async () => {
+			emitter.on("promiseErrorEvent", async () => {
+				throw new Error("Async error");
+			});
 
-		expect(count).toBe(1);
+			await expect(async () => {
+				await emitter.emit("promiseErrorEvent");
+			}).rejects.toThrowError("Async error");
+		});
 
-		chained.off().emit("foo", "foo");
+		it("should work with mixed sync and async listeners", async () => {
+			let syncResult = "";
+			let asyncResult = "";
 
-		expect(count).toBe(1);
-	});
+			emitter.on("asyncEvent", (str: string) => {
+				syncResult = `${str}-sync`;
+			});
 
-	it("should unwrap to the original emitter", () => {
-		const emitter = new LiteEmit<EventMap>();
-		const chained = chain(emitter);
+			emitter.on("asyncEvent", async (str: string) => {
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				asyncResult = `${str}-async`;
+			});
 
-		expect(chained.unwrap()).toBe(emitter);
+			await emitter.emit("asyncEvent", "mixed");
 
-		// Verify that operations on the unwrapped emitter are reflected
-		let count = 0;
-		chained
-			.on("foo", () => {
-				count++;
-			})
-			.emit("foo", "foo");
-
-		expect(count).toBe(1);
+			expect(syncResult).toBe("mixed-sync");
+			expect(asyncResult).toBe("mixed-async");
+		});
 	});
 });

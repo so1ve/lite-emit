@@ -1,21 +1,13 @@
 import type {
-	ErrorHandler,
 	EventMap,
 	Listener,
 	OffFunction,
-	Options,
 	WildcardListener,
 } from "./types";
 
 export class LiteEmit<EM extends EventMap = EventMap> {
 	#listenerMap = new Map<keyof EM, Listener<EM[keyof EM]>[]>();
 	#wildcardListeners: WildcardListener[] = [];
-	#errorHandler: ErrorHandler | undefined;
-
-	constructor(options?: Options) {
-		this.#errorHandler = options?.errorHandler;
-	}
-
 	public on(event: "*", listener: WildcardListener): OffFunction;
 	public on<K extends keyof EM>(
 		event: K,
@@ -61,31 +53,25 @@ export class LiteEmit<EM extends EventMap = EventMap> {
 		return this.on(event, onceListener);
 	}
 
-	#callListenerWithErrorHandler(listener: Listener<any>, args: any[]): void {
-		try {
-			const result = listener(...args);
-			if (result instanceof Promise) {
-				result.catch((e) => {
-					this.#errorHandler?.(e);
-				});
-			}
-		} catch (e: unknown) {
-			this.#errorHandler?.(e);
-		}
-	}
+	public async emit<K extends keyof EM>(
+		event: K,
+		...args: EM[K]
+	): Promise<void> {
+		const results: any[] = [];
 
-	public emit<K extends keyof EM>(event: K, ...args: EM[K]): void {
 		if (this.#wildcardListeners.length > 0) {
 			for (const listener of this.#wildcardListeners) {
-				this.#callListenerWithErrorHandler(listener, [event, ...args]);
+				results.push(listener(event as any, ...args));
 			}
 		}
 		const listeners = this.#listenerMap.get(event);
 		if (listeners) {
 			for (const listener of listeners) {
-				this.#callListenerWithErrorHandler(listener, args);
+				results.push(listener(...args));
 			}
 		}
+
+		return Promise.all(results).then(() => {});
 	}
 
 	public off(): void;
