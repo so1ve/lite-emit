@@ -1,0 +1,10 @@
+name: Lock Threads
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  lock:
+    uses: so1ve/workflows/.github/workflows/lock.yml@v1
