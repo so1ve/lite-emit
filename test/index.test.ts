@@ -197,9 +197,9 @@ describe("should", () => {
 				throw new Error("Async error");
 			});
 
-			await expect(async () => {
-				await emitter.emit("promiseErrorEvent");
-			}).rejects.toThrowError("Async error");
+			await expect(emitter.emit("promiseErrorEvent")).rejects.toThrowError(
+				"Async error",
+			);
 		});
 
 		it("should work with mixed sync and async listeners", async () => {
